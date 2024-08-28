@@ -1,4 +1,6 @@
-﻿namespace MndpTray.Core
+﻿using MndpTray.Protocol;
+
+namespace MndpTray.Core
 {
     partial class ListForm
     {
@@ -7,6 +9,14 @@
         /// </summary>
         private System.ComponentModel.IContainer components = null;
 
+        protected override void CreateHandle()
+        {
+
+            MndpListener.Instance.Start();
+            MndpSender.Instance.Start(MndpHostInfo.Instance);
+
+            base.CreateHandle();
+        }
         /// <summary>
         /// Clean up any resources being used.
         /// </summary>
@@ -18,6 +28,12 @@
                 components.Dispose();
             }
             base.Dispose(disposing);
+
+
+            MndpListener.Instance.Stop();
+            MndpSender.Instance.Stop();
+
+
         }
 
         #region Windows Form Designer generated code

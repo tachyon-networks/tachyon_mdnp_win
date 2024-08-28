@@ -29,7 +29,7 @@ namespace MndpTray.Core
             this.InitializeComponent();
             SetDoubleBuffering(this.dgvGrid);
 
-            this.Text = string.Concat(this.Text, " Version: ", Assembly.GetEntryAssembly().GetName().Version.ToString());
+            this.Text = string.Concat("Tachyon MNDP Utility", " Version: ", Assembly.GetEntryAssembly().GetName().Version.ToString());
         }
 
         #region Event Handlers
@@ -40,54 +40,12 @@ namespace MndpTray.Core
             {
                 var contextMenuStrip = new ContextMenuStrip();
 
-                var pingMenuStrip = new ToolStripMenuItem
+                var clearMenuStrip = new ToolStripMenuItem
                 {
-                    Text = "Ping",
+                    Text = "Clear",
                 };
-                pingMenuStrip.Click += this.Ping_Click;
-                contextMenuStrip.Items.Add(pingMenuStrip);
-
-                var httpMenuStrip = new ToolStripMenuItem
-                {
-                    Text = "Http",
-                };
-                httpMenuStrip.Click += this.Http_Click;
-                contextMenuStrip.Items.Add(httpMenuStrip);
-
-                var sshMenuStrip = new ToolStripMenuItem
-                {
-                    Text = "Ssh",
-                };
-                sshMenuStrip.Click += this.Ssh_Click;
-                contextMenuStrip.Items.Add(sshMenuStrip);
-
-                var rdpMenuStrip = new ToolStripMenuItem
-                {
-                    Text = "Rdp",
-                };
-                rdpMenuStrip.Click += this.Rdp_Click;
-                contextMenuStrip.Items.Add(rdpMenuStrip);
-
-                var vncMenuStrip = new ToolStripMenuItem
-                {
-                    Text = "Vnc",
-                };
-                vncMenuStrip.Click += this.Vnc_Click;
-                contextMenuStrip.Items.Add(vncMenuStrip);
-
-                var winboxMenuStrip = new ToolStripMenuItem
-                {
-                    Text = "Winbox",
-                };
-                winboxMenuStrip.Click += this.Winbox_Click;
-                contextMenuStrip.Items.Add(winboxMenuStrip);
-
-                var messageMenuStrip = new ToolStripMenuItem
-                {
-                    Text = "Message",
-                };
-                messageMenuStrip.Click += this.MessageMenuStrip_Click;
-                contextMenuStrip.Items.Add(messageMenuStrip);
+                clearMenuStrip.Click += this.Clear_Click;
+                contextMenuStrip.Items.Add(clearMenuStrip);
 
                 contextMenuStrip.Show(this, new Point(e.X, e.Y));
             }
@@ -118,51 +76,6 @@ namespace MndpTray.Core
                 string message = form.MsgText;
 
                 System.Diagnostics.Process.Start(path, string.Format("/SERVER:{0} console \"{1}\"", ip, message));
-            }
-            catch (Exception ex)
-            {
-                Program.Log("Exception {0}", ex);
-            }
-        }
-
-        private void Http_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                string ip = this.GetSelectedIpAddress();
-                if (ip == null)
-                {
-                    return;
-                }
-
-                System.Diagnostics.Process.Start(new ProcessStartInfo
-                {
-                    FileName = "http://" + ip,
-                    UseShellExecute = true
-                });               
-            }
-            catch (Exception ex)
-            {
-                Program.Log("Exception {0}", ex);
-            }
-        }
-
-        private void Ping_Click(object sender, EventArgs e)
-        {
-            this.StartProcessWithIpArgument("ping");
-        }
-
-        private void Rdp_Click(object sender, EventArgs e)
-        {
-            try
-            {
-                string ip = this.GetSelectedIpAddress();
-                if (ip == null)
-                {
-                    return;
-                }
-
-                System.Diagnostics.Process.Start("mstsc", "/v:" + ip);
             }
             catch (Exception ex)
             {
@@ -219,21 +132,9 @@ namespace MndpTray.Core
             }
         }
 
-        private void Ssh_Click(object sender, EventArgs e)
+        private void Clear_Click(object sender, EventArgs e)
         {
-            string name = Environment.ExpandEnvironmentVariables(@"c:\Windows\System32\OpenSSH\ssh.exe");
-
-            this.StartProcessWithIpArgument(name);
-        }
-
-        private void Vnc_Click(object sender, EventArgs e)
-        {
-            this.StartProcessWithIpArgument("tvnviewer");
-        }
-
-        private void Winbox_Click(object sender, EventArgs e)
-        {
-            this.StartProcessWithIpArgument("winbox");
+            this.dgvGrid.Rows.Clear();
         }
 
         #endregion Event Handlers

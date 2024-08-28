@@ -5,6 +5,7 @@
  -----------------------------------------------------------------------------*/
 namespace MndpTray.Core
 {
+    using MndpTray.Protocol;
     using System;
     using System.Diagnostics;
     using System.IO;
@@ -28,7 +29,7 @@ namespace MndpTray.Core
             Application.SetCompatibleTextRenderingDefault(false);
 
             Log("------------------< START >------------------");
-            Application.Run(new NotifyContext());
+            Application.Run(new ListForm());
             Log("-------------------< END >-------------------");
         }
 
